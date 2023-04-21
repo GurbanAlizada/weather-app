@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:weatherdb
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+  config:
+    import: optional:file:.env[.properties]
+
+
+
+resilience4j:
+  ratelimiter:
+    instances:
+      basic :
+        limit-for-period: 10
+        limit-refresh-period: 1m
+        timeout-duration: 10s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "*"
+          - prometheus
+
+
+
+weather-stack:
+  base-url: http://api.weatherstack.com/current
+  api-key: ${WEATHER_STACK_API_KEY:default}
